@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function Square({ value, onSquareClick }) {
   function handleClick() {
@@ -48,19 +48,37 @@ const checkWinner = function (squares) {
       squares[first] === squares[second] &&
       squares[second] === squares[third]
     ) {
-      console.log("you win!");
+      console.log("you win!", squares);
+      return squares[first];
     }
   }
+  console.log("nulls");
+  return null;
 };
 
 export default function Board() {
-  const [val, setVal] = useState(Array(9).fill(null));
+  const [squares, setSquares] = useState(Array(9).fill(null));
   const [turn, setTurn] = useState("X");
+
+  console.log(squares);
+  const winner = checkWinner(squares);
+  let status;
+  if (winner) {
+    status = "Winner: " + winner;
+  } else {
+    status = "Next player: " + (turn === "O" ? "X" : "O");
+  }
 
   // changes the value of the array by renaming it to X
   function handleClick(num) {
+    // check if it is not null
+    if (checkWinner(squares) || squares[num]) {
+      console.log("that is already a clicked node");
+      return;
+    }
+
     // clone the array
-    const newArr = val.slice();
+    const newArr = squares.slice();
 
     // fill the modified array
     newArr[num] = turn;
@@ -71,30 +89,15 @@ export default function Board() {
     // set new array. then check if there is a winner!
 
     // return new array
-    setVal(newArr);
+    setSquares(newArr);
   }
-
-  useEffect(() => {
-    checkWinner(val);
-  });
-
-  // check if it is complete
-  /**
-
-  *   x , x, x
-   *  null, null, null
-   * null, null, null
-   */
-
-  // function isComplete() {
-  //   // check the array if there is no null
-  // }
 
   return (
     <>
+      <div className="status">{status}</div>
       <div className="board-row">
         <Square
-          value={val[0]}
+          value={squares[0]}
           onSquareClick={() => {
             handleClick(0);
           }}
@@ -103,14 +106,14 @@ export default function Board() {
           onSquareClick={() => {
             handleClick(1);
           }}
-          value={val[1]}
+          value={squares[1]}
         />
 
         <Square
           onSquareClick={() => {
             handleClick(2);
           }}
-          value={val[2]}
+          value={squares[2]}
         />
       </div>
 
@@ -119,19 +122,19 @@ export default function Board() {
           onSquareClick={() => {
             handleClick(3);
           }}
-          value={val[3]}
+          value={squares[3]}
         />
         <Square
           onSquareClick={() => {
             handleClick(4);
           }}
-          value={val[4]}
+          value={squares[4]}
         />
         <Square
           onSquareClick={() => {
             handleClick(5);
           }}
-          value={val[5]}
+          value={squares[5]}
         />
       </div>
       <div className="board-row">
@@ -139,19 +142,19 @@ export default function Board() {
           onSquareClick={() => {
             handleClick(6);
           }}
-          value={val[6]}
+          value={squares[6]}
         />
         <Square
           onSquareClick={() => {
             handleClick(7);
           }}
-          value={val[7]}
+          value={squares[7]}
         />
         <Square
           onSquareClick={() => {
             handleClick(8);
           }}
-          value={val[8]}
+          value={squares[8]}
         />
       </div>
     </>
