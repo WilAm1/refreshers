@@ -1,9 +1,9 @@
-import Board from "./Board";
+import Game from "./Board";
 
 export default function App() {
   return (
     <div>
-      <Board />
+      <Game />
     </div>
   );
 }
